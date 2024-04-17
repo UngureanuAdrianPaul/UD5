@@ -2,6 +2,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.Scanner;
 import java.io.File;
 
 public class AccesoConfiguracion {
@@ -27,13 +28,44 @@ public class AccesoConfiguracion {
 
       System.out.println(miConexion.toString());   
 
-      
+      String nuevoJdbc;
+      String nuevoUsuario;
+      String nuevoClave;
+      Scanner teclado = new Scanner(System.in);
+      System.out.print("Introduce nuevo jdbc: ");
+      nuevoJdbc = teclado.nextLine();
+      System.out.print("Introduce nuevo usuario: ");
+      nuevoUsuario = teclado.nextLine();
+      System.out.print("Introduce nuevo clave: ");
+      nuevoClave = teclado.nextLine();
+
+      System.out.println("nuevo jdbc: "+nuevoJdbc);
+      System.out.println("nuevo usuario: "+nuevoUsuario);
+      System.out.println("nuevo clave: "+nuevoClave);
+
+      Conexion nuevaConexion = new Conexion(nuevoJdbc, nuevoUsuario, nuevoClave);
+
+      insertarNuevaConfiguracion(nuevaConexion, propiedades);
+      propiedades.list(System.out);
+
+      teclado.close();
       
    } catch (FileNotFoundException e) {
       System.out.println(e.getMessage());
    } finally {
       if (lector!= null) lector.close();
-   }
+      
  }
+
+   
+   }
+   public static void insertarNuevaConfiguracion(Conexion conx, Properties properties){
+      properties.setProperty("jdbc", conx.getJdbc());
+      properties.setProperty("usuario", conx.getUsuario());
+      properties.setProperty("clave", conx.getClave());
+      properties.setProperty("nuevaClave", "nuevoValor");
+   }
+
+   
    
 }
